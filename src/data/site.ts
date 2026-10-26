@@ -1,12 +1,13 @@
 import { places } from './photos';
+// Edited in the admin panel under "Site settings"
+import settings from '../content/settings/site.json';
 
-// Placeholders until the brand is decided
 export const site = {
-  brand: 'Brand Name',
-  tagline: 'Wedding & Proposal Photography · Izmir',
-  whatsapp: '905000000000',
-  email: 'hello@example.com',
-  instagram: 'https://instagram.com/',
+  brand: settings.brand,
+  tagline: settings.tagline,
+  whatsapp: settings.whatsapp.replace(/\D/g, ''),
+  email: settings.email,
+  instagram: settings.instagram,
   city: 'Izmir',
 };
 
@@ -20,6 +21,7 @@ export interface Service {
   h1: string;
   intro: string;
   cover: string;
+  // Starting price, set in the admin panel; empty means "on request"
   from: string;
   includes: string[];
   category: 'wedding' | 'proposal' | 'couple';
@@ -34,7 +36,7 @@ export const services: Service[] = [
     intro:
       'Getting married on the Aegean coast? From vineyard ceremonies in Urla to seaside receptions in Çeşme, I document your day calmly and honestly, so you can stay in the moment while I take care of the memories.',
     cover: 'photo-1779475501433-69a3a0b310f8',
-    from: '€ —',
+    from: settings.prices.wedding,
     includes: ['Up to 10 hours of coverage', '500+ edited photos', 'Private online gallery', 'Location scouting help', 'Delivery within 3 weeks'],
     category: 'wedding',
   },
@@ -46,7 +48,7 @@ export const services: Service[] = [
     intro:
       'Planning to pop the question? I help you choose the perfect spot, stay hidden until the big moment, and then guide a relaxed mini shoot for the two of you. She will never see it coming.',
     cover: 'photo-1763129636696-0bda22154cf7',
-    from: '€ —',
+    from: settings.prices.proposal,
     includes: ['Planning call & spot suggestions', 'Hidden photographer during the moment', '30–60 min couple shoot after', '80+ edited photos', 'Sneak peek within 48 hours'],
     category: 'proposal',
   },
@@ -58,7 +60,7 @@ export const services: Service[] = [
     intro:
       'On holiday in Izmir? Turn your trip into lasting memories with a relaxed photo session in the stone streets of Alaçatı, the vineyards of Urla or along the Kordon at sunset. No posing experience needed.',
     cover: 'photo-1590632396158-a5765ff11bda',
-    from: '€ —',
+    from: settings.prices.couple,
     includes: ['1–2 hour session', 'One or two locations', '60+ edited photos', 'Outfit & timing tips', 'Delivery within 1 week'],
     category: 'couple',
   },

@@ -1,0 +1,12 @@
+{
+  "brand": "Brand Name",
+  "tagline": "Wedding & Proposal Photography · Izmir",
+  "whatsapp": "905000000000",
+  "email": "hello@example.com",
+  "instagram": "https://instagram.com/",
+  "prices": {
+    "wedding": "",
+    "proposal": "",
+    "couple": ""
+  }
+}

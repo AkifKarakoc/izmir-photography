@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import AlbumShelf from '../../components/book/AlbumShelf.astro';
-import { albumsFor } from '../../data/albums';
+import { getAlbums } from '../../data/albums';
 import { photos, img } from '../../data/photos';
 import { locations, services, type Location } from '../../data/site';
 
@@ -62,7 +62,7 @@ const gallery = photos.slice(2, 8);
     <Gallery photos={gallery} />
   </section>
 
-  <AlbumShelf albums={albumsFor({ location: l.slug })} title={`Albums from ${l.name}`} />
+  <AlbumShelf albums={await getAlbums({ location: l.slug })} title={`Albums from ${l.name}`} />
 
   <CtaBand title={`Planning a shoot in ${l.name}?`} />
 </Base>

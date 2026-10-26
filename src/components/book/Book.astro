@@ -3,9 +3,9 @@
 // The page-turning engine is shared; each album style brings its own cover,
 // paper, format and page layouts.
 import BookPage from './BookPage.astro';
-import { img } from '../../data/photos';
+import Photo from '../Photo.astro';
 import { site } from '../../data/site';
-import { bookPages, type BookAlbum } from '../../data/albums';
+import { bookPages, formatMonth, type BookAlbum } from '../../data/albums';
 
 interface Props {
   album: BookAlbum;
@@ -34,11 +34,11 @@ const spreadRatio = (format.width * 2) / format.height;
           album.style === 'classic' && (
             <>
               <div class="cover__window">
-                <img src={img(album.cover, 800)} alt={`${album.title}, ${album.subtitle}`} />
+                <Photo photo={album.cover} width={500} alt={`${album.title}, ${album.subtitle}`} loading="eager" />
               </div>
               <div class="cover__foil">
                 <h2>{album.title}</h2>
-                <span>{album.location} · {album.date}</span>
+                <span>{album.location} · {formatMonth(album.date)}</span>
               </div>
             </>
           )
@@ -49,7 +49,7 @@ const spreadRatio = (format.width * 2) / format.height;
               <span>{album.subtitle}</span>
               <h2>{album.title}</h2>
               <i class="cover__rule" />
-              <span>{album.location} · {album.date}</span>
+              <span>{album.location} · {formatMonth(album.date)}</span>
             </div>
           )
         }
@@ -405,6 +405,17 @@ const spreadRatio = (format.width * 2) / format.height;
     margin-top: 1em;
     font-size: clamp(0.9rem, 1.6vw, 1.1rem);
     color: var(--muted);
+  }
+
+  .bk .blank-mark::before {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    color: var(--muted);
+    opacity: 0.35;
   }
 
   .bk .p-full .fill {

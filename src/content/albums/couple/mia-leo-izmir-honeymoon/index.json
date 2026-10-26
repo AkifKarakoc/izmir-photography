@@ -1,0 +1,78 @@
+{
+  "title": "Our week in Izmir",
+  "subtitle": "Mia & Leo · Honeymoon",
+  "location": "Izmir",
+  "locations": [
+    "kordon",
+    "sirince",
+    "alacati",
+    "urla",
+    "cesme"
+  ],
+  "date": "2026-05-15",
+  "cover": "https://images.unsplash.com/photo-1590632396158-a5765ff11bda",
+  "story": "Mia and Leo spent their honeymoon week exploring Izmir. We met at a few of their favourite spots along the way: the Kordon at sunset, a slow breakfast in Şirince and the stone streets of Alaçatı.\n\nPlaceholder text: the real story of each trip goes here.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "eyebrow": "May 2026",
+      "title": "Our week in Izmir",
+      "text": "Mia & Leo · Honeymoon"
+    },
+    {
+      "type": "taped",
+      "photo": "https://images.unsplash.com/photo-1590632396158-a5765ff11bda",
+      "note": "Day 1 · first sunset by the sea"
+    },
+    {
+      "type": "polaroids",
+      "photo_1": "https://images.unsplash.com/photo-1778629053302-a49f235fb7d9",
+      "caption_1": "Kordon",
+      "photo_2": "https://images.unsplash.com/photo-1629751450989-c3aa81267f7a",
+      "caption_2": "us",
+      "photo_3": "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+      "caption_3": "Kemeraltı"
+    },
+    {
+      "type": "stamp",
+      "photo": "https://images.unsplash.com/photo-1570177491571-318decb146b9",
+      "place": "Şirince",
+      "coords": "37.94° N · 27.43° E",
+      "note": "Wine tasting and the slowest breakfast ever."
+    },
+    {
+      "type": "panorama",
+      "photo": "https://images.unsplash.com/photo-1605209831726-aeb86db54124",
+      "left_text": "Day 4 · Alaçatı’s stone streets",
+      "right_text": "We got lost on purpose. Twice."
+    },
+    {
+      "type": "collage",
+      "photo_1": "https://images.unsplash.com/photo-1561287495-a3fe1fd28504",
+      "photo_2": "https://images.unsplash.com/photo-1546032996-6dfacbacbf3f",
+      "photo_3": "https://images.unsplash.com/photo-1782150626809-eaff7c51ce5d",
+      "note": "Urla, between the vineyards"
+    },
+    {
+      "type": "taped",
+      "photo": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
+      "note": "The hill we almost didn’t climb"
+    },
+    {
+      "type": "polaroids",
+      "photo_1": "https://images.unsplash.com/photo-1758971143133-707ea4b2056e",
+      "caption_1": "Çeşme",
+      "photo_2": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92",
+      "caption_2": "last day",
+      "photo_3": "https://images.unsplash.com/photo-1591604466107-ec97de577aff",
+      "caption_3": "see you soon"
+    },
+    {
+      "type": "title",
+      "title": "Your trip, your story",
+      "text": "Holiday and honeymoon sessions all around Izmir.",
+      "cta": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+---
+// Renders an album photo: uploaded files are resized and converted by Astro,
+// remote URLs (the Unsplash placeholders) are requested at the right size.
+import { Image } from 'astro:assets';
+import type { Photo } from '../data/albums';
+import { remoteSrc, remoteSrcset } from '../data/photos';
+
+interface Props {
+  photo: Photo;
+  // Widest size the photo is shown at, in CSS pixels
+  width: number;
+  alt?: string;
+  class?: string;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+// Photos sit in half a spread at most on larger screens
+const { photo, width, alt = '', class: cls, sizes = `(max-width: 700px) 100vw, min(${width}px, 50vw)`, loading = 'lazy' } = Astro.props;
+const widths = [Math.round(width / 2), width, Math.round(width * 1.5)];
+---
+
+{
+  typeof photo === 'string' ? (
+    <img class={cls} src={remoteSrc(photo, width)} srcset={remoteSrcset(photo, widths)} sizes={sizes} alt={alt} loading={loading} decoding="async" />
+  ) : (
+    <Image class={cls} src={photo} widths={widths.filter((w) => w <= photo.width)} sizes={sizes} alt={alt} loading={loading} />
+  )
+}

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Gallery from '../components/Gallery.astro';
 import CtaBand from '../components/CtaBand.astro';
 import AlbumShelf from '../components/book/AlbumShelf.astro';
-import { albumsFor } from '../data/albums';
+import { getAlbums } from '../data/albums';
 import { photos, img } from '../data/photos';
 import { services, locations, type Service } from '../data/site';
 
@@ -45,7 +45,7 @@ const others = services.filter((o) => o.slug !== s.slug);
       </div>
       <aside class="package reveal">
         <span class="eyebrow">Package</span>
-        <p class="package__price">Starting from {s.from}</p>
+        <p class="package__price">{s.from ? `Starting from ${s.from}` : 'Price on request'}</p>
         <ul>
           {s.includes.map((i) => <li>{i}</li>)}
         </ul>
@@ -58,7 +58,7 @@ const others = services.filter((o) => o.slug !== s.slug);
     <Gallery photos={gallery} />
   </section>
 
-  <AlbumShelf albums={albumsFor({ category: s.category })} title={`${s.title} albums`} />
+  <AlbumShelf albums={await getAlbums({ category: s.category })} title={`${s.title} albums`} />
 
   <section class="section section--alt">
     <div class="wrap">

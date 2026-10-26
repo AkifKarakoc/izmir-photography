@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
 import AlbumCard from '../components/book/AlbumCard.astro';
-import { albums, categoryLabels, type AlbumCategory } from '../data/albums';
+import { getAlbums, categoryLabels, type AlbumCategory } from '../data/albums';
+
+const albums = await getAlbums();
 
 const filters: { key: 'all' | AlbumCategory; label: string }[] = [
   { key: 'all', label: 'All albums' },

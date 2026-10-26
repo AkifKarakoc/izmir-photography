@@ -1,7 +1,7 @@
 ---
 // One page of a book album. Which page types appear depends on the album
 // style; how each looks is styled per style in Book.astro.
-import { img } from '../../data/photos';
+import Photo from '../Photo.astro';
 import type { RenderedPage } from '../../data/albums';
 
 interface Props {
@@ -25,12 +25,12 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
     )
   }
 
-  {p.type === 'full' && <img class="fill" src={img(p.photo, 1000)} alt="" />}
+  {p.type === 'full' && <Photo class="fill" photo={p.photo} width={1000} loading="eager" />}
 
   {
     p.type === 'framed' && (
       <>
-        <div class="frame"><img class="fill" src={img(p.photo, 900)} alt="" /></div>
+        <div class="frame"><Photo class="fill" photo={p.photo} width={900} loading="eager" /></div>
         {p.caption && <p class="caption">{p.caption}</p>}
       </>
     )
@@ -40,7 +40,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
     (p.type === 'stack' || p.type === 'quad') && (
       <div class="grid">
         {p.photos.map((ph) => (
-          <div class="frame"><img class="fill" src={img(ph, 700)} alt="" /></div>
+          <div class="frame"><Photo class="fill" photo={ph} width={700} loading="eager" /></div>
         ))}
       </div>
     )
@@ -49,7 +49,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'offset' && (
       <>
-        <div class="frame"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+        <div class="frame"><Photo class="fill" photo={p.photo} width={800} loading="eager" /></div>
         <p class="note">{p.text}</p>
       </>
     )
@@ -58,7 +58,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'closing' && (
       <div class="p-closing__inner">
-        <div class="frame"><img class="fill" src={img(p.photo, 700)} alt="" /></div>
+        <div class="frame"><Photo class="fill" photo={p.photo} width={700} loading="eager" /></div>
         <p class="caption">Thank you</p>
       </div>
     )
@@ -76,7 +76,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'pano' && (
       <>
-        <div class="half-photo"><img src={img(p.photo, 1600)} alt="" /></div>
+        <div class="half-photo"><Photo photo={p.photo} width={1600} loading="eager" /></div>
         <p class="note">{p.text}</p>
       </>
     )
@@ -85,11 +85,13 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'spread' && (
       <>
-        <div class="half-photo"><img src={img(p.photo, 2000)} alt="" /></div>
+        <div class="half-photo"><Photo photo={p.photo} width={2000} loading="eager" /></div>
         {p.caption && <p class="caption caption--light">{p.caption}</p>}
       </>
     )
   }
+
+  {p.type === 'blank' && <span class="blank-mark" aria-hidden="true" />}
 
   <!-- Cinematic -->
   {
@@ -106,7 +108,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
       <div class="film">
         {p.photos.map((ph, i) => (
           <figure class="film__frame">
-            <img class="fill" src={img(ph, 600)} alt="" />
+            <Photo class="fill" photo={ph} width={600} loading="eager" />
             {p.captions?.[i] && <figcaption>{p.captions[i]}</figcaption>}
           </figure>
         ))}
@@ -117,7 +119,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'scene' && (
       <>
-        <div class="frame"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+        <div class="frame"><Photo class="fill" photo={p.photo} width={800} loading="eager" /></div>
         {p.caption && <span class="stamp-time">{p.caption}</span>}
       </>
     )
@@ -126,7 +128,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'darkfull' && (
       <>
-        <div class="frame"><img class="fill" src={img(p.photo, 1000)} alt="" /></div>
+        <div class="frame"><Photo class="fill" photo={p.photo} width={1000} loading="eager" /></div>
         {p.caption && <span class="stamp-time">{p.caption}</span>}
       </>
     )
@@ -138,7 +140,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
       <>
         {p.photos.map((ph, i) => (
           <figure class={`polaroid polaroid--${i + 1}`}>
-            <img src={img(ph, 500)} alt="" />
+            <Photo photo={ph} width={500} loading="eager" />
             <figcaption>{p.captions[i]}</figcaption>
           </figure>
         ))}
@@ -149,7 +151,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
   {
     p.type === 'taped' && (
       <>
-        <div class="print print--taped"><img class="fill" src={img(p.photo, 900)} alt="" /></div>
+        <div class="print print--taped"><Photo class="fill" photo={p.photo} width={900} loading="eager" /></div>
         <p class="hand">{p.note}</p>
       </>
     )
@@ -163,7 +165,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
           <span>{p.coords}</span>
         </div>
         <p class="hand">{p.note}</p>
-        <div class="print print--taped"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+        <div class="print print--taped"><Photo class="fill" photo={p.photo} width={800} loading="eager" /></div>
       </>
     )
   }
@@ -172,7 +174,7 @@ const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.sid
     p.type === 'collage' && (
       <>
         {p.photos.map((ph, i) => (
-          <div class={`print collage--${i + 1}`}><img class="fill" src={img(ph, 700)} alt="" /></div>
+          <div class={`print collage--${i + 1}`}><Photo class="fill" photo={ph} width={700} loading="eager" /></div>
         ))}
         {p.note && <p class="hand">{p.note}</p>}
       </>

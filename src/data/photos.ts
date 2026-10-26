@@ -18,6 +18,18 @@ export function srcset(id: string) {
   return [480, 800, 1200, 1800].map((w) => `${img(id, w)} ${w}w`).join(', ');
 }
 
+// Remote photo URLs used in albums: Unsplash can resize on request, other
+// hosts are used as they are
+const isUnsplash = (url: string) => url.startsWith('https://images.unsplash.com/');
+
+export function remoteSrc(url: string, width: number) {
+  return isUnsplash(url) ? `${url.split('?')[0]}?auto=format&fit=crop&w=${width}&q=75` : url;
+}
+
+export function remoteSrcset(url: string, widths: number[]) {
+  return isUnsplash(url) ? widths.map((w) => `${remoteSrc(url, w)} ${w}w`).join(', ') : undefined;
+}
+
 export const photos: Photo[] = [
   { id: 'photo-1779475501433-69a3a0b310f8', alt: 'Newlyweds walking through a sunny vineyard', category: 'wedding' },
   { id: 'photo-1519741497674-611481863552', alt: 'Groom beside the bride holding her bouquet', category: 'wedding', tall: true },

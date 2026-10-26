@@ -1,0 +1,77 @@
+{
+  "title": "Sophie & Daniel",
+  "subtitle": "A surprise proposal",
+  "location": "Alaçatı, Izmir",
+  "locations": [
+    "alacati",
+    "cesme"
+  ],
+  "date": "2026-06-20",
+  "cover": "https://images.unsplash.com/photo-1763129636696-0bda22154cf7",
+  "story": "Daniel planned everything in secret: a beach setup at sunset, a hidden photographer and a ring he had carried for three days. Sophie thought they were just going for dinner.\n\nPlaceholder text: the real story of each proposal goes here.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "eyebrow": "A surprise proposal",
+      "title": "Sophie & Daniel",
+      "text": "Alaçatı · June 2026"
+    },
+    {
+      "type": "scene",
+      "photo": "https://images.unsplash.com/photo-1763129636465-f4016848a06f",
+      "caption": "18:55 · Everything is ready"
+    },
+    {
+      "type": "filmstrip",
+      "photo_1": "https://images.unsplash.com/photo-1514432433435-ce2c7903dfba",
+      "caption_1": "19:40",
+      "photo_2": "https://images.unsplash.com/photo-1480185378309-ff10682412df",
+      "caption_2": "19:41",
+      "photo_3": "https://images.unsplash.com/photo-1542286777-b6499aa99a0a",
+      "caption_3": "19:42"
+    },
+    {
+      "type": "word",
+      "word": "Yes.",
+      "caption": "19:42 · Alaçatı"
+    },
+    {
+      "type": "fullspread",
+      "photo": "https://images.unsplash.com/photo-1763129636696-0bda22154cf7",
+      "caption": "Golden hour on the beach"
+    },
+    {
+      "type": "darkfull",
+      "photo": "https://images.unsplash.com/photo-1775717522396-5d56c0c9aeae",
+      "caption": "Later that evening, on the water"
+    },
+    {
+      "type": "scene",
+      "photo": "https://images.unsplash.com/photo-1579555973297-560c43ca7562",
+      "caption": "The ring"
+    },
+    {
+      "type": "scene",
+      "photo": "https://images.unsplash.com/photo-1766583463515-f8f5925faad2",
+      "caption": "Above the sea"
+    },
+    {
+      "type": "filmstrip",
+      "photo_1": "https://images.unsplash.com/photo-1629751450989-c3aa81267f7a",
+      "photo_2": "https://images.unsplash.com/photo-1590632396158-a5765ff11bda",
+      "photo_3": "https://images.unsplash.com/photo-1517910306750-d49c0fa41fb1"
+    },
+    {
+      "type": "title",
+      "title": "Planning a surprise?",
+      "text": "I’ll stay hidden until the big moment.",
+      "cta": true
+    },
+    {
+      "type": "word",
+      "word": "Forever.",
+      "caption": "The beginning"
+    }
+  ]
+}

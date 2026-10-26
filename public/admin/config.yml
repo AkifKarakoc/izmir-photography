@@ -1,0 +1,363 @@
+# Admin panel (Sveltia CMS, Decap compatible) at /admin/
+# Albums are saved to src/content/albums/<category>/<slug>/index.json with
+# their photos in the same folder; see src/content.config.ts for the schema.
+# Labels are in Turkish for the photographer; site texts are written in English.
+
+backend:
+  name: github
+  repo: AkifKarakoc/izmir-photography
+  branch: main
+  commit_messages:
+    create: 'Yeni {{collection}}: {{slug}}'
+    update: 'Güncelleme {{collection}}: {{slug}}'
+    delete: 'Silindi {{collection}}: {{slug}}'
+    uploadMedia: 'Fotoğraf yüklendi: {{path}}'
+    deleteMedia: 'Fotoğraf silindi: {{path}}'
+
+# Default for uploads outside albums; albums keep their photos next to them
+media_folder: src/assets/uploads
+public_folder: /src/assets/uploads
+
+# Album folders become URLs: keep them plain ASCII ("albümü" -> "albumu")
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+media_libraries:
+  default:
+    config:
+      max_file_size: 30000000
+      # "WhatsApp Image 2026-05-11 at 21.24.46.png" -> "whatsapp-image-2026-05-11-at-21-24-46.webp"
+      slugify_filename: true
+      # Photos are shrunk to WebP before they are saved, so the repository stays
+      # small; the site makes the smaller sizes from these at build time
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2560
+          height: 2560
+
+collections:
+  # --- Wedding: classic style ---------------------------------------------------
+  - name: wedding
+    label: Düğün albümleri
+    label_singular: Düğün albümü
+    description: Klasik tarz. Koyu keten kapak, dikey format, sade ve simetrik sayfalar.
+    folder: src/content/albums/wedding
+    path: '{{slug}}/index'
+    format: json
+    extension: json
+    create: true
+    slug: '{{title}}-{{location}}'
+    identifier_field: title
+    summary: '{{title}} · {{location}} · {{date}}'
+    sortable_fields: [date, title]
+    # Photos are stored next to the album file
+    media_folder: ''
+    public_folder: ''
+    fields:
+      - &f_title
+        label: Başlık
+        name: title
+        widget: string
+        hint: Albümün adı, genelde çiftin adı. Örn. "Emma & James" ya da "Our week in Izmir".
+      - &f_subtitle
+        label: Alt başlık
+        name: subtitle
+        widget: string
+        hint: Kısa bir açıklama, İngilizce. Örn. "A vineyard wedding".
+      - &f_location
+        label: Lokasyon
+        name: location
+        widget: string
+        hint: Sitede görünen lokasyon. Örn. "Urla, Izmir".
+      - &f_locations
+        label: Lokasyon sayfaları
+        name: locations
+        widget: select
+        multiple: true
+        required: false
+        hint: Albüm bu lokasyon sayfalarının altında da listelenir.
+        options:
+          - { label: Alaçatı, value: alacati }
+          - { label: Çeşme, value: cesme }
+          - { label: Urla, value: urla }
+          - { label: Şirince, value: sirince }
+          - { label: Kordon & Izmir şehir merkezi, value: kordon }
+      - &f_date
+        label: Çekim tarihi
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - &f_cover
+        label: Kapak fotoğrafı
+        name: cover
+        widget: image
+        hint: Portfolyoda albüm kapağında görünür.
+      - &f_story
+        label: Hikâye
+        name: story
+        widget: text
+        required: false
+        hint: Albümün altında görünür ve Google tarafından okunur. İngilizce yazın, paragrafları boş bir satırla ayırın.
+      - &f_draft
+        label: Taslak
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Açıkken albüm sitede görünmez.
+      - label: Sayfalar
+        name: pages
+        widget: list
+        hint: Sayfaları albümdeki sırayla ekleyin. İki sayfaya yayılan düzenler kendiliğinden sol sayfadan başlar.
+        types:
+          - &page_title
+            label: Yazı sayfası
+            name: title
+            widget: object
+            summary: 'Yazı · {{fields.title}}'
+            fields:
+              - { label: Üst yazı, name: eyebrow, widget: string, required: false, hint: 'Küçük harflerle üstte. Örn. "Urla · September 2026"' }
+              - { label: Başlık, name: title, widget: string }
+              - { label: Metin, name: text, widget: string, required: false }
+              - { label: Rezervasyon butonu göster, name: cta, widget: boolean, default: false, required: false }
+          - label: Tam sayfa fotoğraf
+            name: full
+            widget: object
+            summary: Tam sayfa
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+          - label: Çerçeveli fotoğraf
+            name: framed
+            widget: object
+            summary: 'Çerçeveli · {{fields.caption}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Not, name: caption, widget: string, required: false }
+          - label: Alt alta iki fotoğraf
+            name: stack
+            widget: object
+            summary: Alt alta iki
+            fields:
+              - { label: Üstteki fotoğraf, name: top, widget: image }
+              - { label: Alttaki fotoğraf, name: bottom, widget: image }
+          - label: Dörtlü düzen
+            name: quad
+            widget: object
+            summary: Dörtlü
+            fields:
+              - { label: Fotoğraf 1 (sol üst), name: photo_1, widget: image }
+              - { label: Fotoğraf 2 (sağ üst), name: photo_2, widget: image }
+              - { label: Fotoğraf 3 (sol alt), name: photo_3, widget: image }
+              - { label: Fotoğraf 4 (sağ alt), name: photo_4, widget: image }
+          - label: Kenara kaydırılmış fotoğraf ve not
+            name: offset
+            widget: object
+            summary: 'Kaydırılmış · {{fields.text}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Not, name: text, widget: string }
+          - label: Kapanış (küçük fotoğraf ve "Thank you")
+            name: closing
+            widget: object
+            summary: Kapanış
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+          - &page_panorama
+            label: Ortadan geçen fotoğraf (iki sayfa)
+            name: panorama
+            widget: object
+            summary: 'Ortadan geçen · {{fields.left_text}}'
+            hint: Fotoğraf iki sayfanın iç yarılarına yayılır, notlar dış kenarlarda durur. Yatay fotoğraf seçin.
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Sol not, name: left_text, widget: string, required: false }
+              - { label: Sağ not, name: right_text, widget: string, required: false }
+          - &page_fullspread
+            label: İki sayfayı kaplayan fotoğraf
+            name: fullspread
+            widget: object
+            summary: 'İki sayfa · {{fields.caption}}'
+            hint: Tek fotoğraf iki sayfanın tamamını kaplar. Yatay fotoğraf seçin.
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Not, name: caption, widget: string, required: false }
+          - &page_note
+            label: Not sayfası
+            name: note
+            widget: object
+            summary: 'Not · {{fields.text}}'
+            fields:
+              - { label: Not, name: text, widget: string }
+              - { label: Alt not, name: sub, widget: string, required: false }
+
+  # --- Proposal: cinematic style ------------------------------------------------
+  - name: proposal
+    label: Teklif albümleri
+    label_singular: Teklif albümü
+    description: Sinematik tarz. Kadife kapak, kare format, koyu sayfalar ve anı adım adım anlatan film şeritleri.
+    folder: src/content/albums/proposal
+    path: '{{slug}}/index'
+    format: json
+    extension: json
+    create: true
+    slug: '{{title}}-{{location}}'
+    identifier_field: title
+    summary: '{{title}} · {{location}} · {{date}}'
+    sortable_fields: [date, title]
+    # Photos are stored next to the album file
+    media_folder: ''
+    public_folder: ''
+    fields:
+      - *f_title
+      - *f_subtitle
+      - *f_location
+      - *f_locations
+      - *f_date
+      - *f_cover
+      - *f_story
+      - *f_draft
+      - label: Sayfalar
+        name: pages
+        widget: list
+        hint: Sayfaları albümdeki sırayla ekleyin. İki sayfaya yayılan düzenler kendiliğinden sol sayfadan başlar.
+        types:
+          - *page_title
+          - label: Sahne (ortada fotoğraf ve saat)
+            name: scene
+            widget: object
+            summary: 'Sahne · {{fields.caption}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Saat / not, name: caption, widget: string, required: false, hint: 'Örn. "18:55 · Everything is ready"' }
+          - label: Koyu sayfada büyük fotoğraf
+            name: darkfull
+            widget: object
+            summary: 'Koyu · {{fields.caption}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Not, name: caption, widget: string, required: false }
+          - label: Film şeridi (3 kare)
+            name: filmstrip
+            widget: object
+            summary: Film şeridi
+            hint: Anı sırayla anlatan üç kare. Dikey fotoğraflar daha iyi durur.
+            fields:
+              - { label: Kare 1, name: photo_1, widget: image }
+              - { label: Kare 1 saati, name: caption_1, widget: string, required: false, hint: 'Örn. "19:40"' }
+              - { label: Kare 2, name: photo_2, widget: image }
+              - { label: Kare 2 saati, name: caption_2, widget: string, required: false }
+              - { label: Kare 3, name: photo_3, widget: image }
+              - { label: Kare 3 saati, name: caption_3, widget: string, required: false }
+          - label: Tek kelime (koyu sayfa)
+            name: word
+            widget: object
+            summary: 'Kelime · {{fields.word}}'
+            fields:
+              - { label: Kelime, name: word, widget: string, hint: 'Örn. "Yes."' }
+              - { label: Saat / not, name: caption, widget: string, required: false, hint: 'Örn. "19:42 · Alaçatı"' }
+          - *page_fullspread
+          - *page_panorama
+          - *page_note
+
+  # --- Couples & honeymoon: travel journal style ---------------------------------
+  - name: couple
+    label: Çift & balayı albümleri
+    label_singular: Çift & balayı albümü
+    description: Gezi günlüğü tarzı. Deri kapak, yatay format, bantlı fotoğraflar, polaroidler ve el yazısı notlar.
+    folder: src/content/albums/couple
+    path: '{{slug}}/index'
+    format: json
+    extension: json
+    create: true
+    slug: '{{title}}-{{location}}'
+    identifier_field: title
+    summary: '{{title}} · {{location}} · {{date}}'
+    sortable_fields: [date, title]
+    # Photos are stored next to the album file
+    media_folder: ''
+    public_folder: ''
+    fields:
+      - *f_title
+      - *f_subtitle
+      - *f_location
+      - *f_locations
+      - *f_date
+      - *f_cover
+      - *f_story
+      - *f_draft
+      - label: Sayfalar
+        name: pages
+        widget: list
+        hint: Sayfaları albümdeki sırayla ekleyin. İki sayfaya yayılan düzenler kendiliğinden sol sayfadan başlar.
+        types:
+          - *page_title
+          - label: Bantlı fotoğraf ve el yazısı not
+            name: taped
+            widget: object
+            summary: 'Bantlı · {{fields.note}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Not, name: note, widget: string }
+          - label: Üç polaroid
+            name: polaroids
+            widget: object
+            summary: Polaroidler
+            fields:
+              - { label: Polaroid 1, name: photo_1, widget: image }
+              - { label: Polaroid 1 yazısı, name: caption_1, widget: string, required: false }
+              - { label: Polaroid 2, name: photo_2, widget: image }
+              - { label: Polaroid 2 yazısı, name: caption_2, widget: string, required: false }
+              - { label: Polaroid 3, name: photo_3, widget: image }
+              - { label: Polaroid 3 yazısı, name: caption_3, widget: string, required: false }
+          - label: Posta damgası, not ve fotoğraf
+            name: stamp
+            widget: object
+            summary: 'Damga · {{fields.place}}'
+            fields:
+              - { label: Fotoğraf, name: photo, widget: image }
+              - { label: Yer adı, name: place, widget: string, hint: 'Damgada büyük harflerle yazar. Örn. "Şirince"' }
+              - { label: Koordinat, name: coords, widget: string, required: false, hint: 'Örn. "37.94° N · 27.43° E"' }
+              - { label: Not, name: note, widget: string, required: false }
+          - label: Üç fotoğraflık kolaj
+            name: collage
+            widget: object
+            summary: 'Kolaj · {{fields.note}}'
+            fields:
+              - { label: Büyük fotoğraf (sol), name: photo_1, widget: image }
+              - { label: Küçük fotoğraf (sağ üst), name: photo_2, widget: image }
+              - { label: Küçük fotoğraf (sağ alt), name: photo_3, widget: image }
+              - { label: Not, name: note, widget: string, required: false }
+          - *page_panorama
+          - *page_fullspread
+          - *page_note
+
+  # --- Site settings ---------------------------------------------------------------
+  - name: settings
+    label: Site ayarları
+    editor:
+      preview: false
+    files:
+      - name: site
+        label: İletişim ve fiyatlar
+        file: src/content/settings/site.json
+        format: json
+        fields:
+          - { label: Marka adı, name: brand, widget: string }
+          - { label: Kısa tanım, name: tagline, widget: string }
+          - { label: WhatsApp numarası, name: whatsapp, widget: string, hint: 'Ülke koduyla, boşluksuz. Örn. 905321234567' }
+          - { label: E-posta, name: email, widget: string }
+          - { label: Instagram adresi, name: instagram, widget: string, hint: 'Tam adres. Örn. https://instagram.com/kullaniciadi' }
+          - label: Başlangıç fiyatları
+            name: prices
+            widget: object
+            hint: Boş bırakılırsa sitede "Price on request" yazar.
+            fields:
+              - { label: Düğün, name: wedding, widget: string, required: false, hint: 'Örn. "€1,200"' }
+              - { label: Evlilik teklifi, name: proposal, widget: string, required: false }
+              - { label: Çift & balayı, name: couple, widget: string, required: false }

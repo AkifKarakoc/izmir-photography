@@ -1,7 +1,7 @@
 ---
 // A closed album lying on the table, linking to the full album page.
 // The cover mirrors the album's own style (see Book.astro).
-import { img } from '../../data/photos';
+import Photo from '../Photo.astro';
 import { categoryLabels, type BookAlbum } from '../../data/albums';
 
 interface Props {
@@ -18,7 +18,7 @@ const { album: a } = Astro.props;
         a.style === 'classic' && (
           <>
             <div class="ac__window">
-              <img src={img(a.cover, 500)} alt={`${a.title}, ${a.subtitle} in ${a.location}`} loading="lazy" />
+              <Photo photo={a.cover} width={360} alt={`${a.title}, ${a.subtitle} in ${a.location}`} />
             </div>
             <div class="ac__foil ac__foil--bottom">
               <strong>{a.title}</strong>

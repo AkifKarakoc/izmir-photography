@@ -1,0 +1,77 @@
+{
+  "title": "Emma & James",
+  "subtitle": "A vineyard wedding",
+  "location": "Urla, Izmir",
+  "locations": [
+    "urla"
+  ],
+  "date": "2026-09-12",
+  "cover": "https://images.unsplash.com/photo-1779475501433-69a3a0b310f8",
+  "story": "Emma and James flew in from London for an intimate vineyard wedding in Urla, with forty guests, long tables between the vines and a ceremony timed for the golden hour.\n\nPlaceholder text: the real story of each shoot goes here, a few sentences about the couple, the place and the light.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "eyebrow": "Urla · September 2026",
+      "title": "Emma & James",
+      "text": "A vineyard wedding"
+    },
+    {
+      "type": "framed",
+      "photo": "https://images.unsplash.com/photo-1519741497674-611481863552",
+      "caption": "The first look"
+    },
+    {
+      "type": "panorama",
+      "photo": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92",
+      "left_text": "“We wanted our wedding to feel like a long, slow summer evening.”",
+      "right_text": "A walk through the vines just before the ceremony, while the guests found their seats."
+    },
+    {
+      "type": "stack",
+      "top": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
+      "bottom": "https://images.unsplash.com/photo-1546032996-6dfacbacbf3f"
+    },
+    {
+      "type": "full",
+      "photo": "https://images.unsplash.com/photo-1591604466107-ec97de577aff"
+    },
+    {
+      "type": "quad",
+      "photo_1": "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+      "photo_2": "https://images.unsplash.com/photo-1561287495-a3fe1fd28504",
+      "photo_3": "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18",
+      "photo_4": "https://images.unsplash.com/photo-1629751450989-c3aa81267f7a"
+    },
+    {
+      "type": "offset",
+      "photo": "https://images.unsplash.com/photo-1460978812857-470ed1c77af0",
+      "text": "The quiet moments, in between all the plans."
+    },
+    {
+      "type": "fullspread",
+      "photo": "https://images.unsplash.com/photo-1775126964671-43b4c1a1c5ce",
+      "caption": "Golden hour at the estate"
+    },
+    {
+      "type": "framed",
+      "photo": "https://images.unsplash.com/photo-1590632396158-a5765ff11bda",
+      "caption": "After the party"
+    },
+    {
+      "type": "stack",
+      "top": "https://images.unsplash.com/photo-1757647630063-dd5cd82271f3",
+      "bottom": "https://images.unsplash.com/photo-1550784718-990c6de52adf"
+    },
+    {
+      "type": "title",
+      "title": "Could yours be next?",
+      "text": "Let’s create your own album in Izmir.",
+      "cta": true
+    },
+    {
+      "type": "closing",
+      "photo": "https://images.unsplash.com/photo-1606216794079-73f85bbd57d5"
+    }
+  ]
+}

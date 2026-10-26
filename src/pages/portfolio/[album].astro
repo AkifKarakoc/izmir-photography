@@ -3,25 +3,27 @@ import Base from '../../layouts/Base.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Book from '../../components/book/Book.astro';
 import AlbumCard from '../../components/book/AlbumCard.astro';
-import { img } from '../../data/photos';
+import { getImage } from 'astro:assets';
+import { remoteSrc } from '../../data/photos';
 import { site, services, locations } from '../../data/site';
-import { albums, bookPages, categoryLabels, type BookAlbum } from '../../data/albums';
+import { getAlbums, albumPhotos, categoryLabels, formatMonth, type BookAlbum } from '../../data/albums';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const albums = await getAlbums();
   return albums.map((album) => ({ params: { album: album.slug }, props: { album } }));
 }
 
 const { album: a } = Astro.props as { album: BookAlbum };
 const service = services.find((s) => s.category === a.category)!;
 const places = locations.filter((l) => a.locations.includes(l.slug));
-const more = albums.filter((o) => o.slug !== a.slug).slice(0, 3);
+const more = (await getAlbums()).filter((o) => o.slug !== a.slug).slice(0, 3);
 
 // Every photo in the album, for search engines
-const photoIds = [
-  ...new Set(
-    bookPages(a).flatMap((p) => ('photos' in p ? p.photos : 'photo' in p ? [p.photo] : [])),
+const photoUrls = await Promise.all(
+  albumPhotos(a).map(async (p) =>
+    typeof p === 'string' ? remoteSrc(p, 1200) : new URL((await getImage({ src: p, width: 1200 })).src, Astro.site).href,
   ),
-];
+);
 
 const schema = {
   '@context': 'https://schema.org',
@@ -30,7 +32,7 @@ const schema = {
   description: a.story[0],
   contentLocation: { '@type': 'Place', name: `${a.location}, Turkey` },
   author: { '@type': 'Organization', name: site.brand },
-  image: photoIds.map((id) => img(id, 1200)),
+  image: photoUrls,
 };
 ---
 
@@ -44,7 +46,7 @@ const schema = {
   <section class="head">
     <div class="wrap center">
       <a class="back" href="/portfolio/">← All albums</a>
-      <span class="eyebrow">{categoryLabels[a.category]} · {a.location} · {a.date}</span>
+      <span class="eyebrow">{categoryLabels[a.category]} · {a.location} · {formatMonth(a.date)}</span>
       <h1 data-split>{a.title}</h1>
       <p class="lead"><em>{a.subtitle}</em></p>
     </div>
@@ -76,7 +78,7 @@ const schema = {
         </div>
         <div>
           <span class="eyebrow">When</span>
-          <p>{a.date}</p>
+          <p>{formatMonth(a.date)}</p>
         </div>
       </aside>
     </div>
