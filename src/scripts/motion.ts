@@ -1,5 +1,6 @@
 // Site-wide motion: smooth scroll, intro, text and image reveals, parallax.
-// Everything is skipped for visitors who prefer reduced motion.
+// Visitors who turned off animations in their system settings get a gentle
+// version instead: soft fades only, nothing that moves or zooms.
 // Only transform and opacity are animated, so the browser can run them on the
 // GPU without repainting the page each frame.
 import gsap from 'gsap';
@@ -16,9 +17,31 @@ const ease = 'expo.out';
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function showAll() {
-  root.classList.remove('motion');
-  document.querySelector('.intro-screen')?.remove();
+// --- Gentle mode (reduced motion): fades only -------------------------------
+function initGentle() {
+  const fade = { autoAlpha: 1, duration: 1.2, ease: 'power1.out' };
+  const intro = playIntro(true);
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero) {
+    // Starts as the intro screen fades away
+    const at = intro.duration() ? intro.duration() - 0.5 : 0;
+    gsap.set(hero, { autoAlpha: 1 });
+    gsap.fromTo(hero.querySelector('[data-hero-img]'), { autoAlpha: 0 }, { ...fade, duration: 1.6, delay: at });
+    gsap.fromTo(hero.querySelectorAll('h1, [data-hero-fade]'), { autoAlpha: 0 }, { ...fade, stagger: 0.12, delay: at + 0.3 });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
+    gsap.fromTo(el, { autoAlpha: 0 }, { ...fade, scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+  document.querySelectorAll<HTMLElement>('[data-reveal-img] img').forEach((img) => {
+    gsap.to(img, { ...fade, duration: 1.4, scrollTrigger: { trigger: img, start: 'top 90%' } });
+  });
+  ScrollTrigger.batch('.reveal, .masonry figure', {
+    start: 'top 92%',
+    onEnter: (els) => gsap.to(els, { ...fade, stagger: 0.08, overwrite: true }),
+  });
+  document.addEventListener('gallery:filter', () => ScrollTrigger.refresh());
 }
 
 // --- Smooth scroll ---------------------------------------------------------
@@ -51,7 +74,8 @@ function initHeader() {
 }
 
 // --- Intro screen (first visit of the session only) -------------------------
-function playIntro(): gsap.core.Timeline {
+// The gentle version (reduced motion) fades the name in and the screen out
+function playIntro(gentle = false): gsap.core.Timeline {
   const tl = gsap.timeline();
   const screen = document.querySelector<HTMLElement>('.intro-screen');
   if (!screen) return tl;
@@ -68,6 +92,17 @@ function playIntro(): gsap.core.Timeline {
   }
 
   screen.hidden = false;
+  if (gentle) {
+    tl.from(screen.querySelectorAll('.intro-screen__name, .intro-screen__line, .intro-screen__sub'), {
+      autoAlpha: 0,
+      duration: 1,
+      stagger: 0.25,
+      ease: 'power1.out',
+    })
+      .to(screen, { autoAlpha: 0, duration: 0.9, ease: 'power1.inOut' }, '+=0.5')
+      .add(() => screen.remove());
+    return tl;
+  }
   const letters = new SplitText(screen.querySelector('.intro-screen__name'), { type: 'chars', mask: 'chars' });
   tl.from(letters.chars, { yPercent: 110, duration: 1, stagger: 0.035, ease })
     .from('.intro-screen__line', { scaleX: 0, duration: 0.9, ease: 'power3.inOut' }, '-=0.6')
@@ -175,7 +210,7 @@ function initReveals() {
 async function boot() {
   (window as any).__motion = true;
   if (reduced) {
-    showAll();
+    initGentle();
     return;
   }
   initSmoothScroll();

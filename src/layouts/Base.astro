@@ -73,12 +73,14 @@ const schema = {
         force = force || sessionStorage.getItem('force-motion') === '1';
       } catch (e) {}
       window.__forceMotion = force;
-      if (force || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('motion');
-        setTimeout(function () {
-          if (!window.__motion) document.documentElement.classList.remove('motion');
-        }, 4000);
+      // Animations always run; with reduced motion they are fades only (motion.ts)
+      document.documentElement.classList.add('motion');
+      if (!force && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('reduced');
       }
+      setTimeout(function () {
+        if (!window.__motion) document.documentElement.classList.remove('motion');
+      }, 4000);
     </script>
   </head>
   <body>

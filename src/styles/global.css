@@ -197,6 +197,20 @@ em {
   visibility: hidden;
 }
 
+/* Reduced motion: blocks fade in place instead of rising, photos fade instead of unveiling */
+.motion.reduced .reveal,
+.motion.reduced .masonry figure {
+  transform: none;
+}
+
+.motion.reduced [data-reveal-img]::after {
+  display: none;
+}
+
+.motion.reduced [data-reveal-img] img {
+  opacity: 0;
+}
+
 [data-reveal-img] {
   position: relative;
   overflow: hidden;
