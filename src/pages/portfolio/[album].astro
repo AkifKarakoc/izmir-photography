@@ -1,0 +1,152 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Book from '../../components/book/Book.astro';
+import AlbumCard from '../../components/book/AlbumCard.astro';
+import { img } from '../../data/photos';
+import { site, services, locations } from '../../data/site';
+import { albums, bookPages, categoryLabels, type BookAlbum } from '../../data/albums';
+
+export function getStaticPaths() {
+  return albums.map((album) => ({ params: { album: album.slug }, props: { album } }));
+}
+
+const { album: a } = Astro.props as { album: BookAlbum };
+const service = services.find((s) => s.category === a.category)!;
+const places = locations.filter((l) => a.locations.includes(l.slug));
+const more = albums.filter((o) => o.slug !== a.slug).slice(0, 3);
+
+// Every photo in the album, for search engines
+const photoIds = [
+  ...new Set(
+    bookPages(a).flatMap((p) => ('photos' in p ? p.photos : 'photo' in p ? [p.photo] : [])),
+  ),
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ImageGallery',
+  name: `${a.title} · ${a.subtitle}`,
+  description: a.story[0],
+  contentLocation: { '@type': 'Place', name: `${a.location}, Turkey` },
+  author: { '@type': 'Organization', name: site.brand },
+  image: photoIds.map((id) => img(id, 1200)),
+};
+---
+
+<Base
+  title={`${a.title} · ${a.subtitle} in ${a.location} | ${categoryLabels[a.category]} Photographer Izmir`}
+  description={a.story[0].slice(0, 155)}
+  image={a.cover}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <section class="head">
+    <div class="wrap center">
+      <a class="back" href="/portfolio/">← All albums</a>
+      <span class="eyebrow">{categoryLabels[a.category]} · {a.location} · {a.date}</span>
+      <h1 data-split>{a.title}</h1>
+      <p class="lead"><em>{a.subtitle}</em></p>
+    </div>
+  </section>
+
+  <Book album={a} />
+
+  <section class="section">
+    <div class="wrap story">
+      <div class="reveal">
+        <span class="eyebrow">The story</span>
+        {a.story.map((p, i) => <p class={i === 0 ? 'lead' : ''}>{p}</p>)}
+      </div>
+      <aside class="facts reveal">
+        <div>
+          <span class="eyebrow">Session</span>
+          <p><a href={`/${service.slug}/`}>{service.h1}</a></p>
+        </div>
+        <div>
+          <span class="eyebrow">Where</span>
+          <p>
+            {places.map((l, i) => (
+              <>
+                <a href={`/locations/${l.slug}/`}>{l.name}</a>
+                {i < places.length - 1 ? ', ' : ''}
+              </>
+            ))}
+          </p>
+        </div>
+        <div>
+          <span class="eyebrow">When</span>
+          <p>{a.date}</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Keep leafing</span>
+        <h2 data-split>More albums</h2>
+      </div>
+      <div class="more">
+        {more.map((o) => <AlbumCard album={o} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title={`Dreaming of your own ${categoryLabels[a.category].toLowerCase()} album?`} />
+</Base>
+
+<style>
+  .head {
+    padding: clamp(40px, 6vw, 72px) 0 clamp(24px, 4vw, 40px);
+  }
+  .head h1 {
+    margin-bottom: 0.1em;
+  }
+  .head .lead {
+    margin-bottom: 0;
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 28px;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  .story {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .facts {
+    display: grid;
+    gap: 24px;
+    border-left: 1px solid var(--line);
+    padding-left: 40px;
+  }
+  .facts p {
+    margin: 0;
+  }
+  .more {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 56px 40px;
+    margin-top: 56px;
+  }
+  @media (max-width: 820px) {
+    .story {
+      grid-template-columns: 1fr;
+    }
+    .facts {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+</style>

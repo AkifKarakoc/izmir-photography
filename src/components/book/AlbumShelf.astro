@@ -1,0 +1,58 @@
+---
+// A row of albums on the table, used on service and location pages
+import AlbumCard from './AlbumCard.astro';
+import type { BookAlbum } from '../../data/albums';
+
+interface Props {
+  albums: BookAlbum[];
+  title: string;
+}
+
+const { albums, title } = Astro.props;
+---
+
+{
+  albums.length > 0 && (
+    <section class="shelf-band">
+      <div class="wrap">
+        <div class="center">
+          <span class="eyebrow">Albums</span>
+          <h2 data-split>{title}</h2>
+        </div>
+        <div class="shelf-band__row">
+          {albums.map((a) => (
+            <AlbumCard album={a} />
+          ))}
+        </div>
+        <div class="center shelf-band__more">
+          <a class="link" href="/portfolio/">All albums</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .shelf-band {
+    padding: clamp(64px, 9vw, 112px) 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 35%, rgba(255, 250, 242, 0.55), transparent 70%),
+      radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(60, 40, 25, 0.22)),
+      repeating-linear-gradient(0deg, rgba(120, 90, 60, 0.03) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(120, 90, 60, 0.03) 0 1px, transparent 1px 3px),
+      #e3d6c4;
+  }
+  .shelf-band__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 56px clamp(24px, 4vw, 56px);
+    margin-top: 56px;
+  }
+  .shelf-band__row > :global(.ac) {
+    flex: 0 1 340px;
+  }
+  .shelf-band__more {
+    margin-top: 48px;
+  }
+</style>

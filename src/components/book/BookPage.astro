@@ -1,0 +1,181 @@
+---
+// One page of a book album. Which page types appear depends on the album
+// style; how each looks is styled per style in Book.astro.
+import { img } from '../../data/photos';
+import type { RenderedPage } from '../../data/albums';
+
+interface Props {
+  page: RenderedPage;
+}
+
+const { page: p } = Astro.props;
+const dark = ['word', 'filmstrip', 'darkfull'].includes(p.type);
+const cls = ['page', 'paper', `p-${p.type}`, 'side' in p ? `p-${p.type}--${p.side}` : '', dark ? 'is-dark' : ''].join(' ');
+---
+
+<div class={cls}>
+  {
+    p.type === 'title' && (
+      <div class="p-title__inner">
+        {p.eyebrow && <span class="eyebrow">{p.eyebrow}</span>}
+        <h2>{p.title}</h2>
+        {p.text && <p><em>{p.text}</em></p>}
+        {p.cta && <a class="btn" href="/contact/">Check availability</a>}
+      </div>
+    )
+  }
+
+  {p.type === 'full' && <img class="fill" src={img(p.photo, 1000)} alt="" />}
+
+  {
+    p.type === 'framed' && (
+      <>
+        <div class="frame"><img class="fill" src={img(p.photo, 900)} alt="" /></div>
+        {p.caption && <p class="caption">{p.caption}</p>}
+      </>
+    )
+  }
+
+  {
+    (p.type === 'stack' || p.type === 'quad') && (
+      <div class="grid">
+        {p.photos.map((ph) => (
+          <div class="frame"><img class="fill" src={img(ph, 700)} alt="" /></div>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    p.type === 'offset' && (
+      <>
+        <div class="frame"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+        <p class="note">{p.text}</p>
+      </>
+    )
+  }
+
+  {
+    p.type === 'closing' && (
+      <div class="p-closing__inner">
+        <div class="frame"><img class="fill" src={img(p.photo, 700)} alt="" /></div>
+        <p class="caption">Thank you</p>
+      </div>
+    )
+  }
+
+  {
+    p.type === 'note' && (
+      <div class="p-note__inner">
+        <p class="note">{p.text}</p>
+        {p.sub && <p class="note note--sub">{p.sub}</p>}
+      </div>
+    )
+  }
+
+  {
+    p.type === 'pano' && (
+      <>
+        <div class="half-photo"><img src={img(p.photo, 1600)} alt="" /></div>
+        <p class="note">{p.text}</p>
+      </>
+    )
+  }
+
+  {
+    p.type === 'spread' && (
+      <>
+        <div class="half-photo"><img src={img(p.photo, 2000)} alt="" /></div>
+        {p.caption && <p class="caption caption--light">{p.caption}</p>}
+      </>
+    )
+  }
+
+  <!-- Cinematic -->
+  {
+    p.type === 'word' && (
+      <div class="p-word__inner">
+        <p class="word">{p.word}</p>
+        {p.caption && <span class="stamp-time">{p.caption}</span>}
+      </div>
+    )
+  }
+
+  {
+    p.type === 'filmstrip' && (
+      <div class="film">
+        {p.photos.map((ph, i) => (
+          <figure class="film__frame">
+            <img class="fill" src={img(ph, 600)} alt="" />
+            {p.captions?.[i] && <figcaption>{p.captions[i]}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    p.type === 'scene' && (
+      <>
+        <div class="frame"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+        {p.caption && <span class="stamp-time">{p.caption}</span>}
+      </>
+    )
+  }
+
+  {
+    p.type === 'darkfull' && (
+      <>
+        <div class="frame"><img class="fill" src={img(p.photo, 1000)} alt="" /></div>
+        {p.caption && <span class="stamp-time">{p.caption}</span>}
+      </>
+    )
+  }
+
+  <!-- Journal -->
+  {
+    p.type === 'polaroids' && (
+      <>
+        {p.photos.map((ph, i) => (
+          <figure class={`polaroid polaroid--${i + 1}`}>
+            <img src={img(ph, 500)} alt="" />
+            <figcaption>{p.captions[i]}</figcaption>
+          </figure>
+        ))}
+      </>
+    )
+  }
+
+  {
+    p.type === 'taped' && (
+      <>
+        <div class="print print--taped"><img class="fill" src={img(p.photo, 900)} alt="" /></div>
+        <p class="hand">{p.note}</p>
+      </>
+    )
+  }
+
+  {
+    p.type === 'stamp' && (
+      <>
+        <div class="postmark">
+          <strong>{p.place}</strong>
+          <span>{p.coords}</span>
+        </div>
+        <p class="hand">{p.note}</p>
+        <div class="print print--taped"><img class="fill" src={img(p.photo, 800)} alt="" /></div>
+      </>
+    )
+  }
+
+  {
+    p.type === 'collage' && (
+      <>
+        {p.photos.map((ph, i) => (
+          <div class={`print collage--${i + 1}`}><img class="fill" src={img(ph, 700)} alt="" /></div>
+        ))}
+        {p.note && <p class="hand">{p.note}</p>}
+      </>
+    )
+  }
+</div>

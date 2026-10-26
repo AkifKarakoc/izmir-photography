@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { img } from '../../data/photos';
+import { locations } from '../../data/site';
+---
+
+<Base
+  title="Photoshoot Locations in Izmir | Alaçatı, Çeşme, Urla, Şirince"
+  description="The most beautiful places for weddings, proposals and couple photoshoots around Izmir, with tips on the best time to shoot."
+>
+  <section class="section">
+    <div class="wrap center">
+      <span class="eyebrow">Locations</span>
+      <h1 data-split>The most beautiful places <em>around Izmir</em></h1>
+      <p class="lead">From stone streets to vineyards and turquoise bays. A short guide to my favourite spots for your session.</p>
+    </div>
+  </section>
+
+  <section class="wrap list">
+    {
+      locations.map((l, i) => (
+        <a href={`/locations/${l.slug}/`} class:list={['row', { 'row--flip': i % 2 }]}>
+          <div class="row__img" data-reveal-img>
+            <img src={img(l.cover, 1100)} alt={`${l.name}, Izmir`} loading="lazy" />
+          </div>
+          <div>
+            <span class="eyebrow">0{i + 1}</span>
+            <h2 data-split>{l.name}</h2>
+            <p class="lead">{l.blurb}</p>
+            <span class="link">Explore {l.name}</span>
+          </div>
+        </a>
+      ))
+    }
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .list {
+    display: grid;
+    gap: 96px;
+    padding-bottom: 120px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+    text-decoration: none;
+  }
+  .row img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+  .row--flip .row__img {
+    order: 2;
+  }
+  @media (max-width: 820px) {
+    .list {
+      gap: 64px;
+    }
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .row--flip .row__img {
+      order: 0;
+    }
+  }
+</style>

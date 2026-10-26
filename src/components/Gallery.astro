@@ -1,0 +1,30 @@
+---
+import { img, srcset, type Photo } from '../data/photos';
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<div class="masonry">
+  {
+    photos.map((p) => (
+      <figure data-category={p.category}>
+        <img
+          src={img(p.id, 800)}
+          srcset={srcset(p.id)}
+          sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw"
+          data-full={img(p.id, 1800)}
+          alt={p.alt}
+          width="800"
+          height={p.tall ? 1100 : 600}
+          loading="lazy"
+          decoding="async"
+          style={`aspect-ratio: ${p.tall ? '8 / 11' : '4 / 3'}; object-fit: cover;`}
+        />
+      </figure>
+    ))
+  }
+</div>

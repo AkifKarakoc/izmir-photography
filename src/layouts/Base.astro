@@ -1,0 +1,446 @@
+---
+import '../styles/global.css';
+import { site, whatsappLink, services } from '../data/site';
+import { img } from '../data/photos';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  transparentHeader?: boolean;
+}
+
+const { title, description, image = 'photo-1779475501433-69a3a0b310f8', transparentHeader = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/portfolio/', label: 'Portfolio' },
+  { href: '/#services', label: 'Services' },
+  { href: '/locations/', label: 'Locations' },
+  { href: '/about/', label: 'About' },
+];
+
+// Structured data so Google understands this is a local photography business
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.brand,
+  description: 'Wedding, proposal and couple photographer based in Izmir, Turkey.',
+  url: Astro.site?.toString(),
+  image: img(image, 1200),
+  telephone: `+${site.whatsapp}`,
+  email: site.email,
+  address: { '@type': 'PostalAddress', addressLocality: 'Izmir', addressCountry: 'TR' },
+  areaServed: ['Izmir', 'Alaçatı', 'Çeşme', 'Urla', 'Şirince', 'Ephesus'],
+  priceRange: '€€',
+  sameAs: [site.instagram],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={img(image, 1200)} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#f8f4ef" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&family=Caveat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <slot name="head" />
+    <script is:inline>
+      // Hide animated elements until the motion script takes over.
+      // Falls back to showing everything if it never boots.
+      // ?motion=1 forces animations on for this browser session, for previewing
+      // on devices where reduced motion is enabled
+      var force = /[?&]motion=1/.test(location.search);
+      try {
+        if (force) sessionStorage.setItem('force-motion', '1');
+        force = force || sessionStorage.getItem('force-motion') === '1';
+      } catch (e) {}
+      window.__forceMotion = force;
+      if (force || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+        setTimeout(function () {
+          if (!window.__motion) document.documentElement.classList.remove('motion');
+        }, 4000);
+      }
+    </script>
+  </head>
+  <body>
+    <div class="intro-screen" hidden aria-hidden="true">
+      <div>
+        <p class="intro-screen__name">{site.brand}</p>
+        <span class="intro-screen__line"></span>
+        <p class="intro-screen__sub">Izmir Photography</p>
+      </div>
+    </div>
+    <header class:list={['header', { 'header--overlay': transparentHeader }]} id="top">
+      <div class="header__inner">
+        <a href="/" class="logo" aria-label={`${site.brand} home`}>
+          <span class="logo__name">{site.brand}</span>
+          <span class="logo__sub">Izmir Photography</span>
+        </a>
+        <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+          <span></span><span></span>
+        </button>
+        <nav class="nav" id="nav">
+          {nav.map((n) => <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>)}
+          <a href="/contact/" class="nav__cta">Check availability</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__grid">
+        <div>
+          <p class="footer__brand">{site.brand}</p>
+          <p class="footer__text">
+            Wedding, proposal and couple photographer based in Izmir, Turkey. Available across Alaçatı, Çeşme, Urla,
+            Şirince and Ephesus.
+          </p>
+        </div>
+        <div>
+          <p class="footer__title">Services</p>
+          {services.map((s) => <a href={`/${s.slug}/`}>{s.h1}</a>)}
+        </div>
+        <div>
+          <p class="footer__title">Contact</p>
+          <a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp</a>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+      <div class="wrap footer__bottom">
+        <span>© {new Date().getFullYear()} {site.brand}</span>
+        <span>Draft · placeholder photos from Unsplash</span>
+      </div>
+    </footer>
+
+    <a class="wa-float" href={whatsappLink()} target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"
+        ><path
+          fill="currentColor"
+          d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3Z"
+        ></path></svg
+      >
+    </a>
+
+    <div class="lightbox" hidden>
+      <button class="lightbox__close" aria-label="Close">×</button>
+      <button class="lightbox__nav lightbox__prev" aria-label="Previous">‹</button>
+      <img alt="" />
+      <button class="lightbox__nav lightbox__next" aria-label="Next">›</button>
+    </div>
+
+    <script>
+      // Mobile menu
+      const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+      const header = document.querySelector('.header');
+      btn?.addEventListener('click', () => {
+        const open = header?.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(!!open));
+      });
+
+      // Solid header after scrolling past the hero
+      const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 40);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Lightbox for any gallery image marked with data-full
+      const box = document.querySelector<HTMLElement>('.lightbox')!;
+      const boxImg = box.querySelector('img')!;
+      let items: HTMLImageElement[] = [];
+      let index = 0;
+      const show = (i: number) => {
+        index = (i + items.length) % items.length;
+        boxImg.src = items[index].dataset.full!;
+        boxImg.alt = items[index].alt;
+      };
+      document.addEventListener('click', (e) => {
+        const target = (e.target as HTMLElement).closest<HTMLImageElement>('img[data-full]');
+        if (!target) return;
+        items = [...document.querySelectorAll<HTMLImageElement>('img[data-full]')].filter((el) => el.offsetParent);
+        show(items.indexOf(target));
+        box.hidden = false;
+        document.body.style.overflow = 'hidden';
+        document.dispatchEvent(new Event('lightbox:open'));
+      });
+      const close = () => {
+        box.hidden = true;
+        document.body.style.overflow = '';
+        document.dispatchEvent(new Event('lightbox:close'));
+      };
+      box.querySelector('.lightbox__close')!.addEventListener('click', close);
+      box.querySelector('.lightbox__prev')!.addEventListener('click', () => show(index - 1));
+      box.querySelector('.lightbox__next')!.addEventListener('click', () => show(index + 1));
+      box.addEventListener('click', (e) => e.target === box && close());
+      document.addEventListener('keydown', (e) => {
+        if (box.hidden) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowLeft') show(index - 1);
+        if (e.key === 'ArrowRight') show(index + 1);
+      });
+    </script>
+    <script>
+      import '../scripts/motion';
+    </script>
+
+    <style>
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--bg);
+        transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .header.is-hidden {
+        transform: translateY(-100%);
+      }
+      .header--overlay {
+        position: fixed;
+        left: 0;
+        right: 0;
+        background: transparent;
+        color: #fff;
+      }
+      .header--overlay.is-scrolled,
+      .header--overlay.is-open {
+        background: var(--bg);
+        color: var(--ink);
+        box-shadow: 0 1px 0 var(--line);
+      }
+      .header__inner {
+        max-width: var(--wrap);
+        margin: 0 auto;
+        padding: 18px var(--gutter);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .logo {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+      .logo__name {
+        font-family: var(--serif);
+        font-size: 1.6rem;
+        letter-spacing: 0.04em;
+      }
+      .logo__sub {
+        font-size: 0.62rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        opacity: 0.75;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .nav a {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      .nav a[aria-current='page'] {
+        border-bottom: 1px solid currentColor;
+      }
+      .nav__cta {
+        border: 1px solid currentColor;
+        padding: 0.7em 1.4em;
+      }
+      .menu-btn {
+        display: none;
+        background: none;
+        border: 0;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        color: inherit;
+        cursor: pointer;
+        position: relative;
+      }
+      .menu-btn span {
+        position: absolute;
+        left: 4px;
+        right: 4px;
+        height: 1px;
+        background: currentColor;
+        transition: transform 0.3s, top 0.3s;
+      }
+      .menu-btn span:first-child {
+        top: 12px;
+      }
+      .menu-btn span:last-child {
+        top: 20px;
+      }
+      .is-open .menu-btn span:first-child {
+        top: 16px;
+        transform: rotate(45deg);
+      }
+      .is-open .menu-btn span:last-child {
+        top: 16px;
+        transform: rotate(-45deg);
+      }
+      @media (max-width: 900px) {
+        .menu-btn {
+          display: block;
+        }
+        .nav {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+          padding: 24px var(--gutter) 32px;
+          background: var(--bg);
+          color: var(--ink);
+          box-shadow: 0 1px 0 var(--line);
+        }
+        .is-open .nav {
+          display: flex;
+        }
+      }
+
+      .footer {
+        background: var(--ink);
+        color: #d9cfc4;
+        padding: 72px 0 28px;
+        font-size: 0.95rem;
+      }
+      .footer__grid {
+        display: grid;
+        grid-template-columns: 2fr 1.4fr 1fr;
+        gap: 40px;
+      }
+      .footer__grid a {
+        display: block;
+        text-decoration: none;
+        margin-bottom: 0.4em;
+      }
+      .footer__grid a:hover {
+        color: #fff;
+      }
+      .footer__brand {
+        font-family: var(--serif);
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 0.3em;
+      }
+      .footer__text {
+        max-width: 38ch;
+      }
+      .footer__title {
+        font-size: 0.72rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #fff;
+      }
+      .footer__bottom {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px solid #ffffff22;
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+      @media (max-width: 760px) {
+        .footer__grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .wa-float {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 40;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #25d366;
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+        transition: transform 0.2s;
+      }
+      .wa-float:hover {
+        transform: scale(1.06);
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(20, 17, 15, 0.98);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .lightbox[hidden] {
+        display: none;
+      }
+      .lightbox img {
+        max-height: 88vh;
+        max-width: min(92vw, 1400px);
+        width: auto;
+        object-fit: contain;
+      }
+      .lightbox button {
+        position: absolute;
+        background: none;
+        border: 0;
+        color: #fff;
+        font-size: 2.6rem;
+        font-weight: 200;
+        cursor: pointer;
+        padding: 12px 18px;
+        line-height: 1;
+      }
+      .lightbox__close {
+        top: 12px;
+        right: 12px;
+      }
+      .lightbox__prev {
+        left: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .lightbox__next {
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    </style>
+  </body>
+</html>

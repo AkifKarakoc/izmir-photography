@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import AlbumShelf from '../../components/book/AlbumShelf.astro';
+import { albumsFor } from '../../data/albums';
+import { photos, img } from '../../data/photos';
+import { locations, services, type Location } from '../../data/site';
+
+export function getStaticPaths() {
+  return locations.map((l) => ({ params: { slug: l.slug }, props: { l } }));
+}
+
+const { l } = Astro.props as { l: Location };
+// Later: photos tagged with this location from the admin panel
+const gallery = photos.slice(2, 8);
+---
+
+<Base
+  title={`${l.name} Photographer | Wedding, Proposal & Couple Photoshoot`}
+  description={`Photoshoot in ${l.name}, Izmir: ${l.blurb} Best time to shoot, favourite spots and recent sessions.`}
+  image={l.cover}
+  transparentHeader
+>
+  <section class="banner" data-hero>
+    <img class="banner__img" src={img(l.cover, 2000)} alt={`${l.name}, Izmir`} data-hero-img fetchpriority="high" />
+    <div class="wrap hero__content">
+      <span class="eyebrow" data-hero-fade>Photoshoot location</span>
+      <h1>{l.name} Photographer</h1>
+      <p data-hero-fade>{l.blurb}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap detail">
+      <div>
+        {l.description.map((p, i) => <p class={i === 0 ? 'lead' : ''}>{p}</p>)}
+        <p>
+          Perfect for:
+          {services.map((s, i) => (
+            <>
+              <a href={`/${s.slug}/`}>{s.title.toLowerCase()}</a>{i < services.length - 1 ? ', ' : '.'}
+            </>
+          ))}
+        </p>
+      </div>
+      <aside class="facts reveal">
+        <div>
+          <span class="eyebrow">Best time to shoot</span>
+          <p>{l.bestTime}</p>
+        </div>
+        <div>
+          <span class="eyebrow">Favourite spots</span>
+          <ul>{l.spots.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:96px">
+    <span class="eyebrow">Sessions in {l.name}</span>
+    <Gallery photos={gallery} />
+  </section>
+
+  <AlbumShelf albums={albumsFor({ location: l.slug })} title={`Albums from ${l.name}`} />
+
+  <CtaBand title={`Planning a shoot in ${l.name}?`} />
+</Base>
+
+<style>
+  .banner {
+    position: relative;
+    overflow: hidden;
+    min-height: 70svh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 64px;
+    color: #fff;
+    background: var(--ink);
+  }
+  .banner__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(20, 16, 13, 0.25), rgba(20, 16, 13, 0.6));
+  }
+  .banner .hero__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  .banner .eyebrow {
+    color: #f1e6da;
+  }
+  .banner p {
+    font-size: 1.15rem;
+  }
+  .detail {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .facts {
+    display: grid;
+    gap: 32px;
+    border-left: 1px solid var(--line);
+    padding-left: 40px;
+  }
+  .facts ul {
+    margin: 0;
+    padding-left: 1.1em;
+  }
+  @media (max-width: 820px) {
+    .detail {
+      grid-template-columns: 1fr;
+    }
+    .facts {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+</style>

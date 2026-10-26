@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import AlbumCard from '../components/book/AlbumCard.astro';
+import { albums, categoryLabels, type AlbumCategory } from '../data/albums';
+
+const filters: { key: 'all' | AlbumCategory; label: string }[] = [
+  { key: 'all', label: 'All albums' },
+  ...(Object.keys(categoryLabels) as AlbumCategory[]).map((key) => ({ key, label: categoryLabels[key] })),
+];
+---
+
+<Base
+  title="Portfolio | Wedding & Proposal Albums from Izmir"
+  description="Leaf through real albums of weddings, surprise proposals and honeymoon sessions photographed in Izmir, Alaçatı, Çeşme, Urla and Şirince."
+>
+  <section class="section page-head">
+    <div class="wrap center">
+      <span class="eyebrow">Portfolio</span>
+      <h1 data-split>Every story is <em>an album</em></h1>
+      <p class="lead">Pick an album from the table and leaf through it, page by page.</p>
+      <div class="filters" role="tablist">
+        {
+          filters.map((f, i) => (
+            <button role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-filter={f.key}>
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="table">
+    <div class="wrap shelf">
+      {albums.map((a) => <AlbumCard album={a} />)}
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.ac');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
+      cards.forEach((c) => (c.hidden = key !== 'all' && c.dataset.category !== key));
+      document.dispatchEvent(new Event('gallery:filter'));
+    }),
+  );
+</script>
+
+<style>
+  .page-head {
+    padding-bottom: 48px;
+  }
+  .filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin-top: 32px;
+  }
+  .filters button {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 4px 0;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .filters button[aria-selected='true'] {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  /* The same linen table the albums are read on */
+  .table {
+    padding: clamp(56px, 8vw, 104px) 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 35%, rgba(255, 250, 242, 0.55), transparent 70%),
+      radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(60, 40, 25, 0.22)),
+      repeating-linear-gradient(0deg, rgba(120, 90, 60, 0.03) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(120, 90, 60, 0.03) 0 1px, transparent 1px 3px),
+      #e3d6c4;
+  }
+  .shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: clamp(48px, 6vw, 80px) clamp(24px, 4vw, 56px);
+  }
+  .shelf :global(.ac[hidden]) {
+    display: none;
+  }
+</style>
