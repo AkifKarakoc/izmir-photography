@@ -53,9 +53,6 @@ function initSmoothScroll() {
   gsap.ticker.add((t) => lenis!.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  // The lightbox locks scrolling while it is open
-  document.addEventListener('lightbox:open', () => lenis?.stop());
-  document.addEventListener('lightbox:close', () => lenis?.start());
 }
 
 // --- Header: hide when scrolling down, show when scrolling up ---------------

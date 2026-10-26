@@ -1,11 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import Gallery from '../components/Gallery.astro';
+import Highlights from '../components/book/Highlights.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { photos, img, srcset } from '../data/photos';
+import { img, srcset } from '../data/photos';
+import { getAlbums } from '../data/albums';
 import { services, locations, faqs, testimonials } from '../data/site';
 
-const featured = photos.slice(0, 9);
+// Newest albums first, so recent work leads
+const albums = await getAlbums();
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -98,21 +100,8 @@ const faqSchema = {
     </div>
   </section>
 
-  <!-- Featured gallery -->
-  <section class="section">
-    <div class="wrap">
-      <div class="center reveal">
-        <span class="eyebrow">Recent work</span>
-        <h2 data-split>Moments from the Aegean</h2>
-      </div>
-      <div style="margin-top:48px">
-        <Gallery photos={featured} />
-      </div>
-      <div class="center" style="margin-top:40px">
-        <a class="btn btn--ghost" href="/portfolio/">See full portfolio</a>
-      </div>
-    </div>
-  </section>
+  <!-- Recent work, picked from the albums -->
+  <Highlights albums={albums} count={9} eyebrow="Recent work" title="Moments from the Aegean" />
 
   <!-- Locations -->
   <section class="section section--alt">

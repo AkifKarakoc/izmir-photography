@@ -1,0 +1,106 @@
+---
+// A section of photos picked from albums; each photo opens the album it
+// comes from. Renders nothing when there are no albums yet.
+import Photo from '../Photo.astro';
+import { albumHighlights, type BookAlbum } from '../../data/albums';
+
+interface Props {
+  albums: BookAlbum[];
+  count?: number;
+  eyebrow?: string;
+  title?: string;
+}
+
+const {
+  albums,
+  count = 6,
+  eyebrow = 'Highlights',
+  title = albums.length === 1 ? 'Moments from this album' : 'Moments from these albums',
+} = Astro.props;
+const items = albumHighlights(albums, count);
+---
+
+{
+  items.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <div class="center reveal">
+          <span class="eyebrow">{eyebrow}</span>
+          <h2 data-split>{title}</h2>
+        </div>
+        <div class="masonry highlights">
+          {items.map(({ photo, album }) => (
+            <figure>
+              <a href={`/portfolio/${album.slug}/`} aria-label={`Open the album ${album.title}`}>
+                <Photo
+                  photo={photo}
+                  width={600}
+                  alt={`${album.title}, ${album.subtitle} in ${album.location}`}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                />
+                <figcaption>
+                  <span>{album.title}</span>
+                  <small>Open album →</small>
+                </figcaption>
+              </a>
+            </figure>
+          ))}
+        </div>
+        <div class="center highlights__more">
+          <a class="btn btn--ghost" href="/portfolio/">See all albums</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .highlights {
+    margin-top: 48px;
+  }
+  .highlights figure {
+    cursor: pointer;
+  }
+  .highlights a {
+    position: relative;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+  }
+  .highlights figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 48px 18px 16px;
+    background: linear-gradient(transparent, rgba(20, 16, 13, 0.6));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .highlights a:hover figcaption,
+  .highlights a:focus-visible figcaption {
+    opacity: 1;
+  }
+  .highlights figcaption span {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+  }
+  .highlights figcaption small {
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  /* Touch screens have no hover: keep the album name visible */
+  @media (hover: none) {
+    .highlights figcaption {
+      opacity: 1;
+    }
+  }
+  .highlights__more {
+    margin-top: 40px;
+  }
+</style>

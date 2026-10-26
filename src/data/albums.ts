@@ -117,7 +117,26 @@ export function albumPhotos(album: BookAlbum): Photo[] {
   return [...new Set([album.cover, ...all])];
 }
 
-export const formatMonth = (d: Date) => d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+// Highlights for service, location and home pages: photos taken from the
+// given albums in turn (each album's cover first), so every album is
+// represented before any album shows a second photo
+export function albumHighlights(albums: BookAlbum[], count: number): { photo: Photo; album: BookAlbum }[] {
+  const queues = albums.map((album) => albumPhotos(album).map((photo) => ({ photo, album })));
+  const seen = new Set<Photo>();
+  const out: { photo: Photo; album: BookAlbum }[] = [];
+  while (out.length < count && queues.some((q) => q.length)) {
+    for (const q of queues) {
+      const next = q.shift();
+      if (next && !seen.has(next.photo) && out.length < count) {
+        seen.add(next.photo);
+        out.push(next);
+      }
+    }
+  }
+  return out;
+}
+
+export const formatMonth =(d: Date) => d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 
 // --- From content files -------------------------------------------------------
 

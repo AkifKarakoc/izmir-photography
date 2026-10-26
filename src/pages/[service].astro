@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import Gallery from '../components/Gallery.astro';
 import CtaBand from '../components/CtaBand.astro';
 import AlbumShelf from '../components/book/AlbumShelf.astro';
+import Highlights from '../components/book/Highlights.astro';
 import { getAlbums } from '../data/albums';
-import { photos, img } from '../data/photos';
+import { img } from '../data/photos';
 import { services, locations, type Service } from '../data/site';
 
 export function getStaticPaths() {
@@ -12,7 +12,7 @@ export function getStaticPaths() {
 }
 
 const { s } = Astro.props as { s: Service };
-const gallery = photos.filter((p) => p.category === s.category).concat(photos.filter((p) => p.category !== s.category)).slice(0, 6);
+const albums = await getAlbums({ category: s.category });
 const others = services.filter((o) => o.slug !== s.slug);
 ---
 
@@ -54,11 +54,8 @@ const others = services.filter((o) => o.slug !== s.slug);
     </div>
   </section>
 
-  <section class="wrap" style="padding-bottom:96px">
-    <Gallery photos={gallery} />
-  </section>
-
-  <AlbumShelf albums={await getAlbums({ category: s.category })} title={`${s.title} albums`} />
+  <AlbumShelf albums={albums} title={`${s.title} albums`} />
+  <Highlights albums={albums} />
 
   <section class="section section--alt">
     <div class="wrap">

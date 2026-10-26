@@ -146,13 +146,6 @@ const schema = {
       >
     </a>
 
-    <div class="lightbox" hidden>
-      <button class="lightbox__close" aria-label="Close">×</button>
-      <button class="lightbox__nav lightbox__prev" aria-label="Previous">‹</button>
-      <img alt="" />
-      <button class="lightbox__nav lightbox__next" aria-label="Next">›</button>
-    </div>
-
     <script>
       // Mobile menu
       const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
@@ -166,41 +159,6 @@ const schema = {
       const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 40);
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
-
-      // Lightbox for any gallery image marked with data-full
-      const box = document.querySelector<HTMLElement>('.lightbox')!;
-      const boxImg = box.querySelector('img')!;
-      let items: HTMLImageElement[] = [];
-      let index = 0;
-      const show = (i: number) => {
-        index = (i + items.length) % items.length;
-        boxImg.src = items[index].dataset.full!;
-        boxImg.alt = items[index].alt;
-      };
-      document.addEventListener('click', (e) => {
-        const target = (e.target as HTMLElement).closest<HTMLImageElement>('img[data-full]');
-        if (!target) return;
-        items = [...document.querySelectorAll<HTMLImageElement>('img[data-full]')].filter((el) => el.offsetParent);
-        show(items.indexOf(target));
-        box.hidden = false;
-        document.body.style.overflow = 'hidden';
-        document.dispatchEvent(new Event('lightbox:open'));
-      });
-      const close = () => {
-        box.hidden = true;
-        document.body.style.overflow = '';
-        document.dispatchEvent(new Event('lightbox:close'));
-      };
-      box.querySelector('.lightbox__close')!.addEventListener('click', close);
-      box.querySelector('.lightbox__prev')!.addEventListener('click', () => show(index - 1));
-      box.querySelector('.lightbox__next')!.addEventListener('click', () => show(index + 1));
-      box.addEventListener('click', (e) => e.target === box && close());
-      document.addEventListener('keydown', (e) => {
-        if (box.hidden) return;
-        if (e.key === 'Escape') close();
-        if (e.key === 'ArrowLeft') show(index - 1);
-        if (e.key === 'ArrowRight') show(index + 1);
-      });
     </script>
     <script>
       import '../scripts/motion';
@@ -398,50 +356,6 @@ const schema = {
       }
       .wa-float:hover {
         transform: scale(1.06);
-      }
-
-      .lightbox {
-        position: fixed;
-        inset: 0;
-        z-index: 100;
-        background: rgba(20, 17, 15, 0.98);
-        display: grid;
-        place-items: center;
-        padding: 24px;
-      }
-      .lightbox[hidden] {
-        display: none;
-      }
-      .lightbox img {
-        max-height: 88vh;
-        max-width: min(92vw, 1400px);
-        width: auto;
-        object-fit: contain;
-      }
-      .lightbox button {
-        position: absolute;
-        background: none;
-        border: 0;
-        color: #fff;
-        font-size: 2.6rem;
-        font-weight: 200;
-        cursor: pointer;
-        padding: 12px 18px;
-        line-height: 1;
-      }
-      .lightbox__close {
-        top: 12px;
-        right: 12px;
-      }
-      .lightbox__prev {
-        left: 4px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      .lightbox__next {
-        right: 4px;
-        top: 50%;
-        transform: translateY(-50%);
       }
     </style>
   </body>

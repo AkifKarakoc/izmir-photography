@@ -1,10 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Gallery from '../../components/Gallery.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import AlbumShelf from '../../components/book/AlbumShelf.astro';
+import Highlights from '../../components/book/Highlights.astro';
 import { getAlbums } from '../../data/albums';
-import { photos, img } from '../../data/photos';
+import { img } from '../../data/photos';
 import { locations, services, type Location } from '../../data/site';
 
 export function getStaticPaths() {
@@ -12,8 +12,7 @@ export function getStaticPaths() {
 }
 
 const { l } = Astro.props as { l: Location };
-// Later: photos tagged with this location from the admin panel
-const gallery = photos.slice(2, 8);
+const albums = await getAlbums({ location: l.slug });
 ---
 
 <Base
@@ -57,12 +56,8 @@ const gallery = photos.slice(2, 8);
     </div>
   </section>
 
-  <section class="wrap" style="padding-bottom:96px">
-    <span class="eyebrow">Sessions in {l.name}</span>
-    <Gallery photos={gallery} />
-  </section>
-
-  <AlbumShelf albums={await getAlbums({ location: l.slug })} title={`Albums from ${l.name}`} />
+  <AlbumShelf albums={albums} title={`Albums from ${l.name}`} />
+  <Highlights albums={albums} />
 
   <CtaBand title={`Planning a shoot in ${l.name}?`} />
 </Base>
