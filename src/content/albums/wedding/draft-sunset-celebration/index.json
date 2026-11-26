@@ -1,0 +1,69 @@
+{
+  "title": "Album Two",
+  "subtitle": "A sunset celebration",
+  "location": "Izmir",
+  "locations": [],
+  "date": "2026-07-01",
+  "cover": "p-021.webp",
+  "story": "Placeholder text: the story of this shoot goes here.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "title": "Album Two",
+      "text": "A sunset celebration"
+    },
+    {
+      "type": "framed",
+      "photo": "p-013.webp",
+      "caption": "Before it all began"
+    },
+    {
+      "type": "full",
+      "photo": "p-014.webp"
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-015.webp",
+      "photo_2": "p-016.webp",
+      "photo_3": "p-017.webp",
+      "photo_4": "p-018.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-019.webp"
+    },
+    {
+      "type": "framed",
+      "photo": "p-020.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-021.webp"
+    },
+    {
+      "type": "offset",
+      "photo": "p-022.webp",
+      "text": "Under the flowers, above the valley."
+    },
+    {
+      "type": "full",
+      "photo": "p-023.webp"
+    },
+    {
+      "type": "framed",
+      "photo": "p-025.webp",
+      "caption": "After dark"
+    },
+    {
+      "type": "title",
+      "title": "Could yours be next?",
+      "text": "Let’s create your own album in Izmir.",
+      "cta": true
+    },
+    {
+      "type": "closing",
+      "photo": "p-026.webp"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "title": "Album One",
+  "subtitle": "A vineyard wedding",
+  "location": "Izmir",
+  "locations": [],
+  "date": "2026-06-25",
+  "cover": "p-009.webp",
+  "story": "Placeholder text: the story of this shoot goes here.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "title": "Album One",
+      "text": "A vineyard wedding"
+    },
+    {
+      "type": "framed",
+      "photo": "p-004.webp",
+      "caption": "The dress"
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-001.webp",
+      "photo_2": "p-003.webp",
+      "photo_3": "p-002.webp",
+      "photo_4": "p-012.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-010.webp"
+    },
+    {
+      "type": "fullspread",
+      "photo": "p-006.webp",
+      "caption": "Between the vines"
+    },
+    {
+      "type": "framed",
+      "photo": "p-008.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-009.webp"
+    },
+    {
+      "type": "panorama",
+      "photo": "p-007.webp",
+      "left_text": "Running through the rows."
+    },
+    {
+      "type": "offset",
+      "photo": "p-011.webp",
+      "text": "One last toss of the bouquet."
+    },
+    {
+      "type": "note",
+      "text": "Sunlight, vines and the two of them."
+    },
+    {
+      "type": "title",
+      "title": "Could yours be next?",
+      "text": "Let’s create your own album in Izmir.",
+      "cta": true
+    },
+    {
+      "type": "closing",
+      "photo": "p-005.webp"
+    }
+  ]
+}

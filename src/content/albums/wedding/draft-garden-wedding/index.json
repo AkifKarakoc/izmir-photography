@@ -1,0 +1,135 @@
+{
+  "title": "Album Three",
+  "subtitle": "A garden wedding",
+  "location": "Izmir",
+  "locations": [],
+  "date": "2026-09-01",
+  "cover": "p-073.webp",
+  "story": "Placeholder text: the story of this shoot goes here.",
+  "draft": false,
+  "pages": [
+    {
+      "type": "title",
+      "title": "Album Three",
+      "text": "A garden wedding"
+    },
+    {
+      "type": "framed",
+      "photo": "p-073.webp"
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-029.webp",
+      "photo_2": "p-030.webp",
+      "photo_3": "p-035.webp",
+      "photo_4": "p-036.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-028.webp"
+    },
+    {
+      "type": "offset",
+      "photo": "p-033.webp",
+      "text": "The quiet moment before."
+    },
+    {
+      "type": "full",
+      "photo": "p-031.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-032.webp"
+    },
+    {
+      "type": "framed",
+      "photo": "p-056.webp",
+      "caption": "The first look"
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-034.webp",
+      "photo_2": "p-037.webp",
+      "photo_3": "p-038.webp",
+      "photo_4": "p-071.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-039.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-040.webp"
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-041.webp",
+      "photo_2": "p-042.webp",
+      "photo_3": "p-043.webp",
+      "photo_4": "p-046.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-064.webp"
+    },
+    {
+      "type": "offset",
+      "photo": "p-065.webp",
+      "text": "In the shade of the old trees."
+    },
+    {
+      "type": "framed",
+      "photo": "p-063.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-060.webp"
+    },
+    {
+      "type": "framed",
+      "photo": "p-061.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-050.webp"
+    },
+    {
+      "type": "offset",
+      "photo": "p-062.webp",
+      "text": "A dance on the lawn."
+    },
+    {
+      "type": "quad",
+      "photo_1": "p-044.webp",
+      "photo_2": "p-068.webp",
+      "photo_3": "p-067.webp",
+      "photo_4": "p-070.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-053.webp"
+    },
+    {
+      "type": "framed",
+      "photo": "p-055.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-059.webp"
+    },
+    {
+      "type": "full",
+      "photo": "p-052.webp"
+    },
+    {
+      "type": "title",
+      "title": "Could yours be next?",
+      "text": "Let’s create your own album in Izmir.",
+      "cta": true
+    },
+    {
+      "type": "closing",
+      "photo": "p-051.webp"
+    }
+  ]
+}
